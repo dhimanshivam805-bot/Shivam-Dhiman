@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit User Role - Django Auth System{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Edit User Role</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-control" value="{{ target_user.username }}" disabled>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" value="{{ target_user.email }}" disabled>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_role" class="form-label">Select Role</label>
+                            <select class="form-control" id="id_role" name="role" required>
+                                <option value="">-- Select a role --</option>
+                                <option value="user" {% if user_role.role == 'user' %}selected{% endif %}>Regular User</option>
+                                <option value="admin" {% if user_role.role == 'admin' %}selected{% endif %}>Administrator</option>
+                            </select>
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <strong>Current Role:</strong> 
+                            <span class="badge role-badge-{% if user_role.is_admin %}admin{% else %}user{% endif %}">
+                                {{ user_role.get_role_display }}
+                            </span>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Update Role</button>
+                            <a href="{% url 'accounts:admin_panel' %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Django Auth System{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row align-items-center justify-content-center" style="min-height: 400px;">
+        <div class="col-md-8 text-center">
+            <h1 class="mb-4" style="font-size: 3rem; font-weight: 700;">Welcome to Django Auth System</h1>
+            <p class="lead mb-4" style="font-size: 1.25rem; color: #6b7280;">
+                A secure and comprehensive user authentication system with role-based access control
+            </p>
+            
+            {% if user.is_authenticated %}
+                <div class="alert alert-info" style="font-size: 1.1rem;">
+                    <strong>Welcome back, {{ user.first_name|default:user.username }}!</strong>
+                    <br>You are logged in as <span class="badge role-badge-{% if user.profile.role == 'admin' %}admin{% else %}user{% endif %}">
+                        {{ user.profile.get_role_display|default:"Regular User" }}
+                    </span>
+                </div>
+                <a href="{% url 'accounts:dashboard' %}" class="btn btn-primary btn-lg me-2">Go to Dashboard</a>
+                <a href="{% url 'accounts:profile' %}" class="btn btn-outline-primary btn-lg">View Profile</a>
+            {% else %}
+                <div class="mb-4">
+                    <a href="{% url 'accounts:login' %}" class="btn btn-primary btn-lg me-2">Login</a>
+                    <a href="{% url 'accounts:register' %}" class="btn btn-success btn-lg">Create Account</a>
+                </div>
+                
+                <div class="row mt-5">
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">🔒 Secure</h5>
+                                <p class="card-text">Industry-standard password hashing with Django's authentication system</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">👥 Role-Based Access</h5>
+                                <p class="card-text">Different permission levels for Admins and Regular Users</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">📧 Password Reset</h5>
+                                <p class="card-text">Secure email-based password recovery system</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Panel - Django Auth System{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1>👨‍💼 Admin Panel</h1>
+            <p class="text-muted">Manage users, roles, and permissions</p>
+        </div>
+    </div>
+    
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total Users</h5>
+                    <p class="card-text" style="font-size: 2rem; font-weight: bold;">{{ total_users }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card bg-danger text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Administrators</h5>
+                    <p class="card-text" style="font-size: 2rem; font-weight: bold;">{{ admin_users }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Regular Users</h5>
+                    <p class="card-text" style="font-size: 2rem; font-weight: bold;">{{ regular_users }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Active Users</h5>
+                    <p class="card-text" style="font-size: 2rem; font-weight: bold;">{{ total_users }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Users Table -->
+    <div class="card">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">User Management</h5>
+        </div>
+        <div class="card-body p-0">
+            {% if users %}
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Name</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Joined</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for u in users %}
+                                <tr>
+                                    <td>{{ u.username }}</td>
+                                    <td>{{ u.email }}</td>
+                                    <td>{{ u.get_full_name|default:"-" }}</td>
+                                    <td>
+                                        <span class="badge role-badge-{% if u.profile.role == 'admin' %}admin{% else %}user{% endif %}">
+                                            {{ u.profile.get_role_display }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {% if u.is_active %}
+                                            <span class="badge bg-success">Active</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Inactive</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ u.date_joined|date:"M d, Y" }}</td>
+                                    <td>
+                                        <a href="{% url 'accounts:edit_user_role' u.id %}" class="btn btn-sm btn-primary">Edit Role</a>
+                                        {% if u.id != request.user.id %}
+                                            <a href="{% url 'accounts:delete_user' u.id %}" class="btn btn-sm btn-danger">Delete</a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="p-4 text-center text-muted">
+                    No users found.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

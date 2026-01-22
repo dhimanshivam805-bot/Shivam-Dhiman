@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}User Profile - Django Auth System{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">👤 My Profile</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6 class="text-muted text-uppercase mb-2">Personal Information</h6>
+                            <table class="table table-sm">
+                                <tr>
+                                    <td class="fw-bold">Username:</td>
+                                    <td>{{ user.username }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Email:</td>
+                                    <td>{{ user.email }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">First Name:</td>
+                                    <td>{{ user.first_name|default:"Not set" }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Last Name:</td>
+                                    <td>{{ user.last_name|default:"Not set" }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted text-uppercase mb-2">Account Status</h6>
+                            <table class="table table-sm">
+                                <tr>
+                                    <td class="fw-bold">Role:</td>
+                                    <td>
+                                        <span class="badge role-badge-{% if user_role.is_admin %}admin{% else %}user{% endif %}">
+                                            {{ user_role.get_role_display }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Account Status:</td>
+                                    <td>
+                                        {% if user.is_active %}
+                                            <span class="badge bg-success">Active</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Inactive</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Member Since:</td>
+                                    <td>{{ user.date_joined|date:"M d, Y" }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Last Login:</td>
+                                    <td>{{ user.last_login|date:"M d, Y H:i"|default:"Never" }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="mt-4">
+                        <h6 class="text-muted text-uppercase mb-3">Security Settings</h6>
+                        <a href="{% url 'accounts:password_reset' %}" class="btn btn-primary">Change Password</a>
+                        <a href="{% url 'accounts:dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

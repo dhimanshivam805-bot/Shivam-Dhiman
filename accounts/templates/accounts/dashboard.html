@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Django Auth System{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1>Dashboard</h1>
+            <p class="text-muted">Welcome back, {{ user.first_name|default:user.username }}!</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <span class="badge role-badge-{% if user_role.is_admin %}admin{% else %}user{% endif %} me-2">
+                {% if user_role.is_admin %}👨‍💼 Administrator{% else %}👤 Regular User{% endif %}
+            </span>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">👤 Account Information</h5>
+                    <table class="table table-sm">
+                        <tr>
+                            <td class="fw-bold">Username:</td>
+                            <td>{{ user.username }}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Email:</td>
+                            <td>{{ user.email }}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Full Name:</td>
+                            <td>{{ user.first_name }} {{ user.last_name }}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Role:</td>
+                            <td>
+                                <span class="badge role-badge-{% if user_role.is_admin %}admin{% else %}user{% endif %}">
+                                    {{ user_role.get_role_display }}
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">🔐 Security</h5>
+                    <p class="text-muted">Account Member Since: <strong>{{ user.date_joined|date:"M d, Y" }}</strong></p>
+                    <p class="text-muted">Last Login: <strong>{{ user.last_login|date:"M d, Y H:i" }}</strong></p>
+                    <a href="{% url 'accounts:profile' %}" class="btn btn-primary">View Full Profile</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% if is_admin %}
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0">🛡️ Admin Controls</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>As an administrator, you have access to additional features:</p>
+                        <a href="{% url 'accounts:admin_panel' %}" class="btn btn-danger me-2">Admin Panel</a>
+                        <a href="/admin/" class="btn btn-outline-danger">Django Admin</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h5 class="card-title">📚 Features Available</h5>
+                    <ul class="mb-0">
+                        <li>👤 Manage your profile information</li>
+                        <li>🔐 Change your password securely</li>
+                        <li>📧 Reset password via email</li>
+                        {% if is_admin %}
+                            <li>👥 Manage user accounts and roles</li>
+                            <li>🔑 Control user permissions</li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

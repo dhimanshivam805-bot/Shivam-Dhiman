@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirm Delete User - Django Auth System{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">⚠️ Delete User</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <strong>Warning!</strong> This action cannot be undone.
+                    </div>
+                    
+                    <p>Are you sure you want to delete the following user?</p>
+                    
+                    <div class="card bg-light mb-4">
+                        <div class="card-body">
+                            <p class="mb-1"><strong>Username:</strong> {{ target_user.username }}</p>
+                            <p class="mb-1"><strong>Email:</strong> {{ target_user.email }}</p>
+                            <p class="mb-0"><strong>Name:</strong> {{ target_user.get_full_name|default:"-" }}</p>
+                        </div>
+                    </div>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-danger btn-lg">Yes, Delete User</button>
+                            <a href="{% url 'accounts:admin_panel' %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
